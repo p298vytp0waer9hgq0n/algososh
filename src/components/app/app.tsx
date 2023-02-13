@@ -9,11 +9,12 @@ import { SortingPage } from "../sorting-page/sorting-page";
 import { StackPage } from "../stack-page/stack-page";
 
 import "./app.css";
+import { basename } from "../../constants/deploy";
 
 function App() {
   return (
     <div className="app">
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <Switch>
           <Route path="/" exact>
             <MainPage />
