@@ -39,6 +39,7 @@ export const Button: React.FC<ButtonProps> = ({
       disabled={isLoader || disabled}
       {...rest}
     >
+      {rest.children && !isLoader ? rest.children : []}
       {isLoader ? (
         <img className={styles.loader_icon} src={loaderIcon} alt="Загрузка." />
       ) : (
