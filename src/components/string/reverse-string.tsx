@@ -9,7 +9,7 @@ type TReverseStringProps = {
 
 export function ReverseString ({ word }: TReverseStringProps) {
     const elements = word.map(({ letter, state }, index) => {
-        return <Circle letter={letter} state={state} key={index} />;
+        return <Circle letter={letter} state={state} key={index + letter} />;
     })
     return (
         <div className={`${styles.letters} ${styles.visible}`}>{elements}</div>
