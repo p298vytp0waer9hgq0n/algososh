@@ -1,12 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 
-import styles from "./string.module.css";
 import { ReverseString } from "./reverse-string";
 import { ElementStates } from "../../types/element-states";
 import switchElems from "../../utils/switch";
+import { DELAY_IN_MS } from "../../constants/delays";
+
+import styles from "./string.module.css";
 
 type TWord = Array<{
   letter: string;
@@ -133,7 +135,7 @@ export const StringComponent: React.FC = () => {
           });
           iter++;
         } 
-      }, 1000);
+      }, DELAY_IN_MS);
     }
     return (() => {
       if (interval) clearInterval(interval);

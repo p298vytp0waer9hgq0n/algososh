@@ -1,0 +1,30 @@
+.input-container {
+    margin: auto;
+    max-width: 567px;
+    display: flex;
+    gap: 12px;
+}
+
+.input {
+    max-width: 377px;
+}
+
+.button {
+    width: 178px;
+}
+
+.fibonacci-container {
+    margin: auto;
+    margin-top: 48px;
+    width: fit-content;
+    max-width: 944px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 49px 16px;
+}
+
+.fibonacci-index {
+    margin-top: 8px;
+    display: block;
+    font-size: 18px;
+}
