@@ -122,14 +122,17 @@ export const StringComponent: React.FC = () => {
             } else {
               switchElems(newWord, fi, si);
               newWord[fi].state = newWord[si].state = ElementStates.Modified;
-              if (fi !== mi) newWord[fi + 1].state = newWord[si - 1].state = ElementStates.Changing;
+              if (si - fi > 2) { 
+                newWord[fi + 1].state = newWord[si - 1].state = ElementStates.Changing;
+              } else { 
+                newWord[fi + 1].state = ElementStates.Modified;
+                setRunning(false);
+              }
             }
             return newWord;
           });
           iter++;
-        } else {
-          setRunning(false);
-        }
+        } 
       }, 1000);
     }
     return (() => {
