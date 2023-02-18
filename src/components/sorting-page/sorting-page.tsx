@@ -22,7 +22,7 @@ enum AlgorithmValues {
 export const SortingPage: React.FC = () => {
   const [array, setArray] = useState<TArray>([]);
   const [running, setRunning] = useState<RunningValues | false>(false);
-  const [algorithm, setAlgorithm] = useState<AlgorithmValues>(AlgorithmValues.Select);
+  const [algorithm, setAlgorithm] = useState<AlgorithmValues>(AlgorithmValues.Bubble);
 
   function selectSort () {
     setArray((oldArray) => {
@@ -66,7 +66,50 @@ export const SortingPage: React.FC = () => {
   }
   
   function bubbleSort () {
-
+    setArray((oldArray) => {
+      return oldArray.map((ele, index) => {
+        return {
+          ...ele,
+          state: index < 2 ? ArrayStates.Selected : ArrayStates.Default
+        }
+      });
+    });
+    let i = 0;
+    let firstIndex = 0;
+    let secondIndex = 1;
+    let endIndex = array.length - 1;
+    const currentArray = [ ...array ];
+    const interval = setInterval(() => {
+      // console.log(i++);
+      const condition = running === RunningValues.Ascending ? currentArray[firstIndex].value > currentArray[secondIndex].value : currentArray[firstIndex].value < currentArray[secondIndex].value;
+      if (condition) {
+        switchElems(currentArray, firstIndex, secondIndex);
+      } 
+      if (endIndex < 2) {
+        endIndex = -1;
+      } else {
+        firstIndex++;
+        secondIndex++;
+        if (secondIndex > endIndex) {
+          endIndex--;
+          firstIndex = 0;
+          secondIndex = 1;
+        }
+      }
+      setArray(currentArray.map((ele, index) => {
+        let state: ArrayStates | undefined;
+        if (index === firstIndex || index === secondIndex) state = ArrayStates.Selected;
+        if (index > endIndex) state = ArrayStates.Sorted;
+        return {
+          ...ele,
+          state: state ? state : ArrayStates.Default
+        }
+      }));
+      if (endIndex < 0) {
+        setRunning(false);
+        clearInterval(interval);
+      }
+    }, DELAY_IN_MS);
   }
   
   useEffect(() => {
@@ -81,6 +124,9 @@ export const SortingPage: React.FC = () => {
   useEffect(() => {
     if (running && algorithm === AlgorithmValues.Select) {
       selectSort();
+    }
+    if (running && algorithm === AlgorithmValues.Bubble) {
+      bubbleSort();
     }
   }, [running])
 
