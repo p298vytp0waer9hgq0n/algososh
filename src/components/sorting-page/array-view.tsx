@@ -15,7 +15,7 @@ export default function ArrayView ({ array }: { array: TArray }) {
         return (
             <div key={index}>
                 <div className={styles.bar} style={{ ...height, ...color }}></div>
-                <span>{ele.value}</span>
+                <span className={styles['bar-value']}>{ele.value}</span>
             </div>
         )
     })

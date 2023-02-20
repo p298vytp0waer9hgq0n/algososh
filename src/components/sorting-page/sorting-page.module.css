@@ -1,13 +1,41 @@
 .controls {
+    margin: auto;
     display: flex;
+    max-width: 980px;
+    justify-content: start;
+    align-items: center;
+    gap: 12px;
+}
+
+.radio {
+    margin-right: 29px;
+}
+
+.button {
+    display: flex;
+    gap: 9px;
+    min-width: 205px;
+}
+
+.button:last-of-type {
+    margin-left: auto;
 }
 
 .array {
+    min-height: 369px;
+    margin-top: 48px;
     display: flex;
     gap: 10px;
     align-items: flex-end;
+    justify-content: center;
 }
 
 .bar {
+    margin-bottom: 8px;
     width: 50px;
+}
+
+.bar-value {
+    margin: 0;
+    font-size: 18px;
 }
