@@ -100,9 +100,6 @@ export const StringComponent: React.FC = () => {
   function handleChange (evt: React.ChangeEvent<HTMLInputElement>) {
     setString(evt.target.value);
   }
-  function finishRender () {
-    setRunning(false);
-  }
   
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
