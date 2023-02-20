@@ -22,13 +22,9 @@ enum AlgorithmValues {
 export const SortingPage: React.FC = () => {
   const [array, setArray] = useState<TArray>([]);
   const [running, setRunning] = useState<RunningValues | false>(false);
-  const [algorithm, setAlgorithm] = useState<AlgorithmValues>(AlgorithmValues.Bubble);
+  const [algorithm, setAlgorithm] = useState<AlgorithmValues>(AlgorithmValues.Select);
 
   function randomArr () {
-    /* const testArray = [0, 18, 33, 73, 13, 61, 1, 79, 80, 84, 85, 96];
-    const arr = testArray.map((ele) => {
-      return { value: ele, state: ArrayStates.Default };
-    }) */
     const length = 3 + Math.floor(Math.random() * 14);
     const arr = [];
     for (let i = 0; i <= length; i++) {
@@ -37,7 +33,7 @@ export const SortingPage: React.FC = () => {
     return arr;
   }
 
-  function selectSort () {
+  function selectSort (interval: NodeJS.Timeout | null) {
     setArray((oldArray) => {
       return oldArray.map((ele, index) => {
         return {
@@ -50,7 +46,7 @@ export const SortingPage: React.FC = () => {
     let pivotIndex = 0;
     let currentIndex = 0;
     const currentArray = [ ...array ];
-    const interval = setInterval(() => {
+    interval = setInterval(() => {
       const condition = running === RunningValues.Ascending ? currentArray[pivotIndex].value > currentArray[currentIndex].value : currentArray[pivotIndex].value < currentArray[currentIndex].value;
       if (condition) pivotIndex = currentIndex;
       currentIndex++;
@@ -75,7 +71,7 @@ export const SortingPage: React.FC = () => {
     }, DELAY_IN_MS);
   }
   
-  function bubbleSort () {
+  function bubbleSort (interval: NodeJS.Timeout | null) {
     setArray((oldArray) => {
       return oldArray.map((ele, index) => {
         return {
@@ -89,12 +85,11 @@ export const SortingPage: React.FC = () => {
     let secondIndex = 1;
     let endIndex = array.length - 1;
     const currentArray = [ ...array ];
-    const interval = setInterval(() => {
+    interval = setInterval(() => {
       const condition = running === RunningValues.Ascending ? currentArray[firstIndex].value > currentArray[secondIndex].value : currentArray[firstIndex].value < currentArray[secondIndex].value;
       if (condition) {
         switchElems(currentArray, firstIndex, secondIndex);
         lastIndex = firstIndex;
-        console.log(lastIndex, endIndex);
       } 
       if (endIndex < 2) {
         endIndex = -1;
@@ -119,7 +114,7 @@ export const SortingPage: React.FC = () => {
       }));
       if (endIndex < 0) {
         setRunning(false);
-        clearInterval(interval);
+        clearInterval(interval!);
       }
     }, DELAY_IN_MS);
   }
@@ -129,12 +124,16 @@ export const SortingPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
     if (running && algorithm === AlgorithmValues.Select) {
-      selectSort();
+      selectSort(interval);
     }
     if (running && algorithm === AlgorithmValues.Bubble) {
-      bubbleSort();
+      bubbleSort(interval);
     }
+    return (() => {
+      if (interval) clearInterval(interval);
+    })
   }, [running])
 
   return (
