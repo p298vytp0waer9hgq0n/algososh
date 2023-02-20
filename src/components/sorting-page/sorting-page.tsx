@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DELAY_IN_MS, SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { DELAY_IN_MS } from "../../constants/delays";
 import { ArrayStates } from "../../types/array-states";
 import { TArray } from "../../types/common";
 import switchElems from "../../utils/switch";
@@ -24,6 +24,15 @@ export const SortingPage: React.FC = () => {
   const [running, setRunning] = useState<RunningValues | false>(false);
   const [algorithm, setAlgorithm] = useState<AlgorithmValues>(AlgorithmValues.Bubble);
 
+  function randomArr () {
+    const length = 3 + Math.floor(Math.random() * 14);
+    const arr = [];
+    for (let i = 0; i <= length; i++) {
+      arr.push({value: Math.floor(Math.random() * 101), state: ArrayStates.Default});
+    }
+    return arr;
+  }
+
   function selectSort () {
     setArray((oldArray) => {
       return oldArray.map((ele, index) => {
@@ -33,13 +42,11 @@ export const SortingPage: React.FC = () => {
         }
       });
     });
-    let i = 0;
     let startIndex = 0;
     let pivotIndex = 0;
     let currentIndex = 0;
     const currentArray = [ ...array ];
     const interval = setInterval(() => {
-      console.log(i++);
       const condition = running === RunningValues.Ascending ? currentArray[pivotIndex].value > currentArray[currentIndex].value : currentArray[pivotIndex].value < currentArray[currentIndex].value;
       if (condition) pivotIndex = currentIndex;
       currentIndex++;
@@ -47,7 +54,6 @@ export const SortingPage: React.FC = () => {
         switchElems(currentArray, startIndex, pivotIndex);
         startIndex++;
         pivotIndex = currentIndex = startIndex;
-      } else {
       }
       setArray(currentArray.map((ele, index) => {
         let state: ArrayStates | undefined;
@@ -74,16 +80,17 @@ export const SortingPage: React.FC = () => {
         }
       });
     });
-    let i = 0;
+    let lastIndex = -1;
     let firstIndex = 0;
     let secondIndex = 1;
     let endIndex = array.length - 1;
     const currentArray = [ ...array ];
     const interval = setInterval(() => {
-      // console.log(i++);
+      lastIndex = -1;
       const condition = running === RunningValues.Ascending ? currentArray[firstIndex].value > currentArray[secondIndex].value : currentArray[firstIndex].value < currentArray[secondIndex].value;
       if (condition) {
         switchElems(currentArray, firstIndex, secondIndex);
+        lastIndex = firstIndex;
       } 
       if (endIndex < 2) {
         endIndex = -1;
@@ -91,7 +98,7 @@ export const SortingPage: React.FC = () => {
         firstIndex++;
         secondIndex++;
         if (secondIndex > endIndex) {
-          endIndex--;
+          endIndex = lastIndex;
           firstIndex = 0;
           secondIndex = 1;
         }
@@ -113,12 +120,7 @@ export const SortingPage: React.FC = () => {
   }
   
   useEffect(() => {
-    setArray([5, 100, 66, 56, 16].map((ele) => {
-      return {
-        value: ele,
-        state: ArrayStates.Default
-      }
-    }));
+    setArray(randomArr());
   }, []);
 
   useEffect(() => {
@@ -133,11 +135,11 @@ export const SortingPage: React.FC = () => {
   return (
     <SolutionLayout title="Сортировка массива">
       <div className={styles.controls}>
-        <RadioInput label="Выбор" />
-        <RadioInput label="Пузырёк" />
+        <RadioInput label="Выбор" checked={algorithm === AlgorithmValues.Select} onClick={() => setAlgorithm(AlgorithmValues.Select)} />
+        <RadioInput label="Пузырёк" checked={algorithm === AlgorithmValues.Bubble} onClick={() => setAlgorithm(AlgorithmValues.Bubble)} />
         <Button onClick={() => setRunning(RunningValues.Ascending)}>По возрастанию</Button>
         <Button onClick={() => setRunning(RunningValues.Descending)}>По убыванию</Button>
-        <Button>Новый массив</Button>
+        <Button onClick={() => setArray(randomArr())}>Новый массив</Button>
       </div>
       <ArrayView array={array} />
     </SolutionLayout>
