@@ -25,6 +25,10 @@ export const SortingPage: React.FC = () => {
   const [algorithm, setAlgorithm] = useState<AlgorithmValues>(AlgorithmValues.Bubble);
 
   function randomArr () {
+    /* const testArray = [0, 18, 33, 73, 13, 61, 1, 79, 80, 84, 85, 96];
+    const arr = testArray.map((ele) => {
+      return { value: ele, state: ArrayStates.Default };
+    }) */
     const length = 3 + Math.floor(Math.random() * 14);
     const arr = [];
     for (let i = 0; i <= length; i++) {
@@ -86,11 +90,11 @@ export const SortingPage: React.FC = () => {
     let endIndex = array.length - 1;
     const currentArray = [ ...array ];
     const interval = setInterval(() => {
-      lastIndex = -1;
       const condition = running === RunningValues.Ascending ? currentArray[firstIndex].value > currentArray[secondIndex].value : currentArray[firstIndex].value < currentArray[secondIndex].value;
       if (condition) {
         switchElems(currentArray, firstIndex, secondIndex);
         lastIndex = firstIndex;
+        console.log(lastIndex, endIndex);
       } 
       if (endIndex < 2) {
         endIndex = -1;
@@ -99,6 +103,7 @@ export const SortingPage: React.FC = () => {
         secondIndex++;
         if (secondIndex > endIndex) {
           endIndex = lastIndex;
+          lastIndex = -1;
           firstIndex = 0;
           secondIndex = 1;
         }
@@ -135,11 +140,11 @@ export const SortingPage: React.FC = () => {
   return (
     <SolutionLayout title="Сортировка массива">
       <div className={styles.controls}>
-        <RadioInput label="Выбор" checked={algorithm === AlgorithmValues.Select} onClick={() => setAlgorithm(AlgorithmValues.Select)} />
-        <RadioInput label="Пузырёк" checked={algorithm === AlgorithmValues.Bubble} onClick={() => setAlgorithm(AlgorithmValues.Bubble)} />
-        <Button onClick={() => setRunning(RunningValues.Ascending)}>По возрастанию</Button>
-        <Button onClick={() => setRunning(RunningValues.Descending)}>По убыванию</Button>
-        <Button onClick={() => setArray(randomArr())}>Новый массив</Button>
+        <RadioInput label="Выбор" checked={algorithm === AlgorithmValues.Select} onClick={() => setAlgorithm(AlgorithmValues.Select)} disabled={Boolean(running)} />
+        <RadioInput label="Пузырёк" checked={algorithm === AlgorithmValues.Bubble} onClick={() => setAlgorithm(AlgorithmValues.Bubble)} disabled={Boolean(running)} />
+        <Button onClick={() => setRunning(RunningValues.Ascending)} disabled={Boolean(running)}>По возрастанию</Button>
+        <Button onClick={() => setRunning(RunningValues.Descending)} disabled={Boolean(running)}>По убыванию</Button>
+        <Button onClick={() => setArray(randomArr())} disabled={Boolean(running)}>Новый массив</Button>
       </div>
       <ArrayView array={array} />
     </SolutionLayout>
