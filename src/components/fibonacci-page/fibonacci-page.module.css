@@ -22,9 +22,3 @@
     flex-wrap: wrap;
     gap: 49px 16px;
 }
-
-.fibonacci-index {
-    margin-top: 8px;
-    display: block;
-    font-size: 18px;
-}

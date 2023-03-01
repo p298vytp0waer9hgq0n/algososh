@@ -10,8 +10,7 @@ export function FibonacciString ({ seq }: TFibonacciProps) {
     const elements = seq.map((num, index) => {
         return (
             <div key={index}>
-                <Circle letter={String(num)} />
-                <span className={styles['fibonacci-index']}>{index}</span>
+                <Circle letter={String(num)} index={index} />
             </div>
         );
     })
