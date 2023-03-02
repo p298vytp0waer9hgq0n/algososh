@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import useQueue from "../../hooks/use-queue";
 import { ElementStates } from "../../types/element-states";
@@ -20,25 +20,32 @@ export const QueuePage: React.FC = () => {
   const [value, setValue] = useState<string>();
   const [running, setRunning] = useState<RunningValues | false>(false);
   const queue = useQueue<string>(queueLength);
+  let timeout: NodeJS.Timeout | null = null;
+  
+  useEffect(() => {
+    return () => {
+      if (timeout) clearInterval(timeout);
+    }
+  }, [])
   
   function enqueue () {
     queue.enqueue(value as string);
     setRunning(RunningValues.Enqueue);
     setValue('');
-    setTimeout(() => {
+    timeout = setTimeout(() => {
       setRunning(false);
     }, SHORT_DELAY_IN_MS);
   }
   function dequeue () {
     setRunning(RunningValues.Dequeue);
-    setTimeout(() => {
+    timeout = setTimeout(() => {
       queue.dequeue();
       setRunning(false);
     }, SHORT_DELAY_IN_MS);
   }
   function clearQueue () {
     setRunning(RunningValues.Clear);
-    setTimeout(() => {
+    timeout = setTimeout(() => {
       queue.clear();
       setRunning(false);
     }, SHORT_DELAY_IN_MS);
@@ -47,8 +54,8 @@ export const QueuePage: React.FC = () => {
   const elements = queue.elements.map((ele, index) => {
     const isHead = !queue.isEmpty && index === queue.headIndex;
     const isTail = !queue.isEmpty && index === queue.tailIndex;
-    let styleValue = ElementStates.Default;
-    if ((running === RunningValues.Enqueue && isTail) || (running === RunningValues.Dequeue && isHead) || (running === RunningValues.Clear && ele)) styleValue = ElementStates.Changing; 
+    let stateValue = ElementStates.Default;
+    if ((running === RunningValues.Enqueue && isTail) || (running === RunningValues.Dequeue && isHead) || (running === RunningValues.Clear && ele)) stateValue = ElementStates.Changing; 
     return (
       <Circle 
         key={index}
@@ -56,7 +63,7 @@ export const QueuePage: React.FC = () => {
         index={index}
         head={isHead ? 'head' : undefined}
         tail={isTail ? 'tail' : undefined}
-        state={styleValue}
+        state={stateValue}
       />
     )
   })
