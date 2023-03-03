@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import useQueue from "../../hooks/use-queue";
 import { ElementStates } from "../../types/element-states";
@@ -20,11 +20,11 @@ export const QueuePage: React.FC = () => {
   const [value, setValue] = useState<string>();
   const [running, setRunning] = useState<RunningValues | false>(false);
   const queue = useQueue<string>(queueLength);
-  let timeout: NodeJS.Timeout | null = null;
+  const timeout = useRef<NodeJS.Timeout>()
   
   useEffect(() => {
     return () => {
-      if (timeout) clearInterval(timeout);
+      if (timeout.current) clearInterval(timeout.current);
     }
   }, [])
   
@@ -32,20 +32,20 @@ export const QueuePage: React.FC = () => {
     queue.enqueue(value as string);
     setRunning(RunningValues.Enqueue);
     setValue('');
-    timeout = setTimeout(() => {
+    timeout.current = setTimeout(() => {
       setRunning(false);
     }, SHORT_DELAY_IN_MS);
   }
   function dequeue () {
     setRunning(RunningValues.Dequeue);
-    timeout = setTimeout(() => {
+    timeout.current = setTimeout(() => {
       queue.dequeue();
       setRunning(false);
     }, SHORT_DELAY_IN_MS);
   }
   function clearQueue () {
     setRunning(RunningValues.Clear);
-    timeout = setTimeout(() => {
+    timeout.current = setTimeout(() => {
       queue.clear();
       setRunning(false);
     }, SHORT_DELAY_IN_MS);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { DELAY_IN_MS } from "../../constants/delays";
 import { ArrayStates } from "../../types/array-states";
 import { TArray } from "../../types/common";
@@ -23,6 +23,7 @@ export const SortingPage: React.FC = () => {
   const [array, setArray] = useState<TArray>([]);
   const [running, setRunning] = useState<RunningValues | false>(false);
   const [algorithm, setAlgorithm] = useState<AlgorithmValues>(AlgorithmValues.Select);
+  const interval = useRef<NodeJS.Timeout>();
 
   function randomArr () {
     const length = 3 + Math.floor(Math.random() * 14);
@@ -33,7 +34,7 @@ export const SortingPage: React.FC = () => {
     return arr;
   }
 
-  function selectSort (interval: NodeJS.Timeout | null) {
+  function selectSort (direction: RunningValues) {
     setArray((oldArray) => {
       return oldArray.map((ele, index) => {
         return {
@@ -46,8 +47,8 @@ export const SortingPage: React.FC = () => {
     let pivotIndex = 0;
     let currentIndex = 0;
     const currentArray = [ ...array ];
-    interval = setInterval(() => {
-      const condition = running === RunningValues.Ascending ? currentArray[pivotIndex].value > currentArray[currentIndex].value : currentArray[pivotIndex].value < currentArray[currentIndex].value;
+    interval.current = setInterval(() => {
+      const condition = direction === RunningValues.Ascending ? currentArray[pivotIndex].value > currentArray[currentIndex].value : currentArray[pivotIndex].value < currentArray[currentIndex].value;
       if (condition) pivotIndex = currentIndex;
       currentIndex++;
       if (currentIndex > currentArray.length - 1) {
@@ -66,12 +67,12 @@ export const SortingPage: React.FC = () => {
       }));
       if (startIndex > currentArray.length - 1) {
         setRunning(false);
-        clearInterval(interval!);
+        clearInterval(interval.current!);
       }
     }, DELAY_IN_MS);
   }
   
-  function bubbleSort (interval: NodeJS.Timeout | null) {
+  function bubbleSort (direction: RunningValues) {
     setArray((oldArray) => {
       return oldArray.map((ele, index) => {
         return {
@@ -85,8 +86,8 @@ export const SortingPage: React.FC = () => {
     let secondIndex = 1;
     let endIndex = array.length - 1;
     const currentArray = [ ...array ];
-    interval = setInterval(() => {
-      const condition = running === RunningValues.Ascending ? currentArray[firstIndex].value > currentArray[secondIndex].value : currentArray[firstIndex].value < currentArray[secondIndex].value;
+    interval.current = setInterval(() => {
+      const condition = direction === RunningValues.Ascending ? currentArray[firstIndex].value > currentArray[secondIndex].value : currentArray[firstIndex].value < currentArray[secondIndex].value;
       if (condition) {
         switchElems(currentArray, firstIndex, secondIndex);
         lastIndex = firstIndex;
@@ -114,35 +115,31 @@ export const SortingPage: React.FC = () => {
       }));
       if (endIndex < 0) {
         setRunning(false);
-        clearInterval(interval!);
+        clearInterval(interval.current!);
       }
     }, DELAY_IN_MS);
   }
   
   useEffect(() => {
     setArray(randomArr());
+    return () => {
+      if (interval.current) clearInterval(interval.current);
+    }
   }, []);
 
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-    if (running && algorithm === AlgorithmValues.Select) {
-      selectSort(interval);
-    }
-    if (running && algorithm === AlgorithmValues.Bubble) {
-      bubbleSort(interval);
-    }
-    return (() => {
-      if (interval) clearInterval(interval);
-    })
-  }, [running])
+  function runSort (runningValue: RunningValues) {
+    setRunning(runningValue);
+    if (algorithm === AlgorithmValues.Select) selectSort(runningValue);
+    if (algorithm === AlgorithmValues.Bubble) bubbleSort(runningValue);
+  }
 
   return (
     <SolutionLayout title="Сортировка массива">
       <div className={styles.controls}>
         <RadioInput extraClass={styles.radio} label="Выбор" checked={algorithm === AlgorithmValues.Select} onClick={() => setAlgorithm(AlgorithmValues.Select)} disabled={Boolean(running)} />
         <RadioInput extraClass={styles.radio} label="Пузырёк" checked={algorithm === AlgorithmValues.Bubble} onClick={() => setAlgorithm(AlgorithmValues.Bubble)} disabled={Boolean(running)} />
-        <Button extraClass={styles.button} onClick={() => setRunning(RunningValues.Ascending)} disabled={Boolean(running)} isLoader={running === RunningValues.Ascending}><svg xmlns="http://www.w3.org/2000/svg" width="20" height="12" fill="none"><path fill="#000" fill-opacity=".85" d="M1 0a1 1 0 1 0 0 2h10a1 1 0 1 0 0-2H1ZM0 6a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1Zm0 5a1 1 0 0 1 1-1h18a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1Z"/></svg>По возрастанию</Button>
-        <Button extraClass={styles.button} onClick={() => setRunning(RunningValues.Descending)} disabled={Boolean(running)} isLoader={running === RunningValues.Descending}><svg xmlns="http://www.w3.org/2000/svg" width="21" height="12" fill="none"><path fill="#292929" fill-rule="evenodd" d="M.5 1a1 1 0 0 1 1-1h18a1 1 0 1 1 0 2h-18a1 1 0 0 1-1-1Zm0 5a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2h-14a1 1 0 0 1-1-1Zm1 4a1 1 0 1 0 0 2h10a1 1 0 1 0 0-2h-10Z" clip-rule="evenodd"/></svg>По убыванию</Button>
+        <Button extraClass={styles.button} onClick={() => runSort(RunningValues.Ascending)} disabled={Boolean(running)} isLoader={running === RunningValues.Ascending}><svg xmlns="http://www.w3.org/2000/svg" width="20" height="12" fill="none"><path fill="#000" fill-opacity=".85" d="M1 0a1 1 0 1 0 0 2h10a1 1 0 1 0 0-2H1ZM0 6a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1Zm0 5a1 1 0 0 1 1-1h18a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1Z"/></svg>По возрастанию</Button>
+        <Button extraClass={styles.button} onClick={() => runSort(RunningValues.Descending)} disabled={Boolean(running)} isLoader={running === RunningValues.Descending}><svg xmlns="http://www.w3.org/2000/svg" width="21" height="12" fill="none"><path fill="#292929" fill-rule="evenodd" d="M.5 1a1 1 0 0 1 1-1h18a1 1 0 1 1 0 2h-18a1 1 0 0 1-1-1Zm0 5a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2h-14a1 1 0 0 1-1-1Zm1 4a1 1 0 1 0 0 2h10a1 1 0 1 0 0-2h-10Z" clip-rule="evenodd"/></svg>По убыванию</Button>
         <Button extraClass={styles.button} onClick={() => setArray(randomArr())} disabled={Boolean(running)}>Новый массив</Button>
       </div>
       <ArrayView array={array} />

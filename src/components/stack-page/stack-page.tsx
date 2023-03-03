@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import useStack from "../../hooks/use-stack";
 import { ElementStates } from "../../types/element-states";
@@ -19,11 +19,11 @@ export const StackPage: React.FC = () => {
   const [stackRender, setStackRender] = useState<string[]>([]);
   const [running, setRunning] = useState<RunningValues | false>();
   const stack = useStack<string>();
-  let interval: NodeJS.Timeout | null = null;
+  const interval = useRef<NodeJS.Timeout>();
   
   useEffect(() => {
     return () => {
-      if (interval) clearTimeout(interval);
+      if (interval.current) clearTimeout(interval.current);
     }
   }, []);
   
@@ -32,13 +32,13 @@ export const StackPage: React.FC = () => {
     setRunning(RunningValues.Add);
     value && stack.push(value);
     setStackRender(stack.elements);
-    interval = setTimeout(() => {
+    interval.current = setTimeout(() => {
       setRunning(false);
     }, SHORT_DELAY_IN_MS);
   }
   function stackRemove () {
     setRunning(RunningValues.Remove);
-    interval = setTimeout(() => {
+    interval.current = setTimeout(() => {
       stack.pop();
       setStackRender(stack.elements);
       setRunning(false);

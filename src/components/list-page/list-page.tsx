@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import useLinkedList from "../../hooks/use-linked-list";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
@@ -36,7 +36,7 @@ export const ListPage: React.FC = () => {
   const [running, setRunning] = useState<RunningValues | false>(false);
   const [renderArr, setRenderArr] = useState<any>([]);
   const linkedList = useLinkedList<number>(randomList());
-  let interval: NodeJS.Timeout | null = null;
+  const interval = useRef<NodeJS.Timeout>();
   
   function randomList () {
     const length = 3 + Math.floor(Math.random() * 3);
@@ -47,20 +47,7 @@ export const ListPage: React.FC = () => {
     return arr;
   }
   
-  useEffect(() => {
-    setRenderArr(renderDefault());
-    return () => {
-      if (interval) clearInterval(interval);
-    }
-  }, [])
-  
-  useEffect(() => {
-    if (!running) {
-      interval = setTimeout(() => setRenderArr(renderDefault()), SHORT_DELAY_IN_MS);
-    }
-  }, [running])
-
-  function renderDefault (): TRenderEle[] {
+  const renderDefault = useCallback(function (): TRenderEle[] {
     const arr = linkedList.toArray().map((ele) => {
       return {
         value: ele,
@@ -68,8 +55,21 @@ export const ListPage: React.FC = () => {
       }
     });
     return arr;
-  }
+  }, [linkedList]);
 
+  useEffect(() => {
+    if (!running) {
+      interval.current = setTimeout(() => setRenderArr(renderDefault()), SHORT_DELAY_IN_MS);
+    }
+  }, [running, renderDefault])
+
+  useEffect(() => {
+    setRenderArr(renderDefault());
+    return () => {
+      if (interval.current) clearInterval(interval.current);
+    }
+  }, [renderDefault])
+  
   function append () {
     setRunning(RunningValues.append);
     const curValue = parseInt(value!);
@@ -80,10 +80,10 @@ export const ListPage: React.FC = () => {
       return prev;
     });
     linkedList.append(curValue);
-    interval = setInterval(() => {
+    interval.current = setInterval(() => {
       if (finished) {
         setRunning(false);
-        clearInterval(interval!);
+        clearInterval(interval.current!);
         return;
       }
       const arr = renderDefault();
@@ -102,10 +102,10 @@ export const ListPage: React.FC = () => {
       return prev;
     });
     linkedList.prepend(curValue);
-    interval = setInterval(() => {
+    interval.current = setInterval(() => {
       if (finished) {
         setRunning(false);
-        clearInterval(interval!);
+        clearInterval(interval.current!);
         return;
       }
       const arr = renderDefault();
@@ -122,10 +122,10 @@ export const ListPage: React.FC = () => {
     arr[index].value = null;
     arr[index].sub = {value: val};
     setRenderArr(arr);
-    interval = setTimeout(() => {
+    interval.current = setTimeout(() => {
       linkedList.deleteTail();
       setRunning(false);
-      clearInterval(interval!);
+      clearInterval(interval.current!);
     }, SHORT_DELAY_IN_MS);
   }
   function shift () {
@@ -135,10 +135,10 @@ export const ListPage: React.FC = () => {
     arr[0].value = null;
     arr[0].sub = {value: val};
     setRenderArr(arr);
-    interval = setTimeout(() => {
+    interval.current = setTimeout(() => {
       linkedList.deleteHead();
       setRunning(false);
-      clearInterval(interval!);
+      clearInterval(interval.current!);
     }, SHORT_DELAY_IN_MS);
   }
   function addAtIndex () {
@@ -149,10 +149,10 @@ export const ListPage: React.FC = () => {
     setIndex(undefined);
     let currentIndex = 0;
     let finished = false;
-    interval = setInterval(() => {
+    interval.current = setInterval(() => {
       if (finished) {
         setRunning(false);
-        clearInterval(interval!);
+        clearInterval(interval.current!);
         return;
       }
       const arr = renderDefault();
@@ -182,10 +182,10 @@ export const ListPage: React.FC = () => {
     setIndex(undefined);
     let currentIndex = 0;
     let finished = false;
-    interval = setInterval(() => {
+    interval.current = setInterval(() => {
       if (finished) {
         setRunning(false);
-        clearInterval(interval!);
+        clearInterval(interval.current!);
         linkedList.deleteByIndex(goal);
         return;
       }

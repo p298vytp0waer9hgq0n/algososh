@@ -137,13 +137,13 @@ export const StringComponent: React.FC = () => {
     return (() => {
       if (interval) clearInterval(interval);
     });
-  }, [running])
+  }, [running, string])
 
   return (
     <SolutionLayout title="Строка">
       <div className={styles['input-container']}>
         <Input isLimitText={true} maxLength={11} value={string} onChange={handleChange} disabled={Boolean(running)} />
-        <Button onClick={handleClick} disabled={Boolean(running)} isLoader={running}>Развернуть</Button>
+        <Button onClick={handleClick} disabled={running || !string} isLoader={running}>Развернуть</Button>
       </div>
       { workingWord && <ReverseString word={workingWord} /> }
     </SolutionLayout>
