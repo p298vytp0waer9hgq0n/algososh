@@ -71,7 +71,7 @@ export const QueuePage: React.FC = () => {
   return (
     <SolutionLayout title="Очередь">
       <div className={styles.container}>
-        <Input extraClass={styles.input} value={value || ''} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setValue(evt.target.value)} maxLength={4} isLimitText={true} disabled={Boolean(running)} />
+        <Input placeholder="Введите значение" extraClass={styles.input} value={value || ''} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setValue(evt.target.value)} maxLength={4} isLimitText={true} disabled={Boolean(running)} />
         <Button extraClass={styles.button} onClick={enqueue} disabled={Boolean(running) || !value || queue.isFull} isLoader={running === RunningValues.Enqueue}>Добавить</Button>
         <Button extraClass={styles.button} onClick={dequeue} disabled={Boolean(running) || queue.isEmpty} isLoader={running === RunningValues.Dequeue}>Удалить</Button>
         <Button extraClass={styles.button} onClick={clearQueue} disabled={Boolean(running) || queue.isEmpty} isLoader={running === RunningValues.Clear}>Очистить</Button>
