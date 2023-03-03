@@ -138,8 +138,8 @@ export const SortingPage: React.FC = () => {
   return (
     <SolutionLayout title="Сортировка массива">
       <div className={styles.controls}>
-        <RadioInput extraClass={styles.radio} label="Выбор" checked={algorithm === AlgorithmValues.Select} onClick={() => setAlgorithm(AlgorithmValues.Select)} disabled={Boolean(running)} />
-        <RadioInput extraClass={styles.radio} label="Пузырёк" checked={algorithm === AlgorithmValues.Bubble} onClick={() => setAlgorithm(AlgorithmValues.Bubble)} disabled={Boolean(running)} />
+        <RadioInput extraClass={styles.radio} label="Выбор" checked={algorithm === AlgorithmValues.Select} onChange={() => setAlgorithm(AlgorithmValues.Select)} disabled={Boolean(running)} />
+        <RadioInput extraClass={styles.radio} label="Пузырёк" checked={algorithm === AlgorithmValues.Bubble} onChange={() => setAlgorithm(AlgorithmValues.Bubble)} disabled={Boolean(running)} />
         <Button extraClass={styles.button} onClick={() => runSort(RunningValues.Ascending)} disabled={Boolean(running)} isLoader={running === RunningValues.Ascending}><AscendingIcon />По возрастанию</Button>
         <Button extraClass={styles.button} onClick={() => runSort(RunningValues.Descending)} disabled={Boolean(running)} isLoader={running === RunningValues.Descending}><DescendingIcon />По убыванию</Button>
         <Button extraClass={styles.button} onClick={() => setArray(randomArr())} disabled={Boolean(running)}>Новый массив</Button>
