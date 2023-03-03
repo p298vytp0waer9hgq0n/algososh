@@ -64,10 +64,10 @@ export const StackPage: React.FC = () => {
   return (
     <SolutionLayout title="Стек">
       <div className={styles.container}>
-        <Input value={value || ''} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setValue(evt.target.value)} maxLength={4} isLimitText={true} disabled={Boolean(running)} />
-        <Button onClick={stackAdd} disabled={Boolean(running)} isLoader={running === RunningValues.Add}>Добавить</Button>
-        <Button onClick={stackRemove} disabled={Boolean(running) || stackRender.length < 1} isLoader={running === RunningValues.Remove}>Удалить</Button>
-        <Button onClick={stackClear} disabled={Boolean(running) || stackRender.length < 1}>Очистить</Button>
+        <Input extraClass={styles.input} value={value || ''} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setValue(evt.target.value)} maxLength={4} isLimitText={true} disabled={Boolean(running)} />
+        <Button extraClass={styles.button} onClick={stackAdd} disabled={Boolean(running) || !value} isLoader={running === RunningValues.Add}>Добавить</Button>
+        <Button extraClass={styles.button} onClick={stackRemove} disabled={Boolean(running) || stackRender.length < 1} isLoader={running === RunningValues.Remove}>Удалить</Button>
+        <Button extraClass={styles.button} onClick={stackClear} disabled={Boolean(running) || stackRender.length < 1}>Очистить</Button>
       </div>
       <div className={styles.render}>{elements}</div>
     </SolutionLayout>
