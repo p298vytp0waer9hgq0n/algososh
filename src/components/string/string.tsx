@@ -21,7 +21,7 @@ export const StringComponent: React.FC = () => {
   const [workingWord, setWorkingWord] = useState<TWord>();
   
   function handleClick () {
-    if (string.length < 2) return;
+    // if (string.length < 2) return;
     setRunning(true);
   }
   function handleChange (evt: React.ChangeEvent<HTMLInputElement>) {
@@ -38,7 +38,13 @@ export const StringComponent: React.FC = () => {
       const mi = Math.floor((word.length - 1) / 2);
       setWorkingWord(word);
       interval = setInterval(() => {
-        if (iter <= mi + 1) {
+        if (word.length === 1) {
+          setWorkingWord((oldWord) => {
+            oldWord![0].state = ElementStates.Modified;
+            return oldWord;
+          })
+          setRunning(false);
+        } else if (iter <= mi + 1) {
           setWorkingWord((oldWord) => {
             const fi = iter - 1;
             const si = oldWord!.length - iter;
