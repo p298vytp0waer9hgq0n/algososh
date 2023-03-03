@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useLinkedList from "../../hooks/use-linked-list";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
@@ -206,7 +206,7 @@ export const ListPage: React.FC = () => {
     }, SHORT_DELAY_IN_MS);
   }
 
-  const elements = renderArr.map((ele: TRenderEle, index: number) => {
+  const elements = useMemo(() => renderArr.map((ele: TRenderEle, index: number) => {
     let head;
     let tail;
     if (ele.super) {
@@ -231,7 +231,7 @@ export const ListPage: React.FC = () => {
         />
       </div>
     )
-  })
+  }), [renderArr]);
 
   return (
     <SolutionLayout title="Связный список">

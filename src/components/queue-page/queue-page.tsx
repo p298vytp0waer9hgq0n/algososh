@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import useQueue from "../../hooks/use-queue";
 import { ElementStates } from "../../types/element-states";
@@ -51,7 +51,7 @@ export const QueuePage: React.FC = () => {
     }, SHORT_DELAY_IN_MS);
   }
 
-  const elements = queue.elements.map((ele, index) => {
+  const elements = useMemo(() => queue.elements.map((ele, index) => {
     const isHead = !queue.isEmpty && index === queue.headIndex;
     const isTail = !queue.isEmpty && index === queue.tailIndex;
     let stateValue = ElementStates.Default;
@@ -66,7 +66,7 @@ export const QueuePage: React.FC = () => {
         state={stateValue}
       />
     )
-  })
+  }), [queue, running]);
 
   return (
     <SolutionLayout title="Очередь">
