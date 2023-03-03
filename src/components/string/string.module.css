@@ -1,0 +1,21 @@
+.input-container {
+    margin: auto;
+    max-width: 522px;
+    display: flex;
+    gap: 12px;
+}
+
+.letters {
+    margin-top: 120px;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: all .4s;
+}
+
+.visible {
+    visibility: visible;
+    opacity: 1;
+}

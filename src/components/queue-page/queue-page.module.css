@@ -1,0 +1,24 @@
+.container {
+    margin: auto;
+    max-width: 830px;
+    display: flex;
+    gap: 12px;
+}
+
+.input {
+    max-width: 377px;
+}
+
+.button {
+    min-width: none;
+}
+
+.button:last-of-type {
+    margin-left: auto;
+}
+.render {
+    margin-top: 52px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
