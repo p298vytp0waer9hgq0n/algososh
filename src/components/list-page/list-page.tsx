@@ -8,7 +8,7 @@ import { ArrowIcon } from "../ui/icons/arrow-icon";
 
 import styles from "./list-page.module.css";
 import { ElementStates } from "../../types/element-states";
-import { DELAY_IN_MS, SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 enum RunningValues {
   append = 1,
@@ -20,12 +20,12 @@ enum RunningValues {
 }
 
 type TRenderEle = {
-  value: number | null;
+  value: string | null;
   super?: {
-    value: number | null;
+    value: string | null;
   };
   sub?: {
-    value: number | null;
+    value: string | null;
   }
   state: ElementStates;
 }
@@ -35,14 +35,14 @@ export const ListPage: React.FC = () => {
   const [index, setIndex] = useState<number>();
   const [running, setRunning] = useState<RunningValues | false>(false);
   const [renderArr, setRenderArr] = useState<any>([]);
-  const linkedList = useLinkedList<number>(randomList());
+  const linkedList = useLinkedList<string>(randomList());
   const interval = useRef<NodeJS.Timeout>();
   
   function randomList () {
     const length = 3 + Math.floor(Math.random() * 3);
     const arr = [];
     for (let i = 0; i <= length; i++) {
-      arr.push(Math.floor(Math.random() * 101));
+      arr.push(String(Math.floor(Math.random() * 101)));
     }
     return arr;
   }
@@ -72,7 +72,7 @@ export const ListPage: React.FC = () => {
   
   function append () {
     setRunning(RunningValues.append);
-    const curValue = parseInt(value!);
+    const curValue = value!;
     setValue('');
     let finished = false;
     setRenderArr((prev: any) => {
@@ -94,7 +94,7 @@ export const ListPage: React.FC = () => {
   }
   function prepend () {
     setRunning(RunningValues.prepend);
-    const curValue = parseInt(value!);
+    const curValue = value!;
     setValue('');
     let finished = false;
     setRenderArr((prev: any) => {
@@ -161,7 +161,7 @@ export const ListPage: React.FC = () => {
           arr[i].state = ElementStates.Changing;
         }
         if (i === currentIndex && currentIndex <= goal) {
-          arr[i].super = {value: parseInt(val)}
+          arr[i].super = {value: val}
         }
         if (i === goal && currentIndex > goal) {
           arr[i].state = ElementStates.Modified;
@@ -169,7 +169,7 @@ export const ListPage: React.FC = () => {
       }
       setRenderArr(arr);
       if (currentIndex === goal) {
-        linkedList.addByIndex(parseInt(val), goal);
+        linkedList.addByIndex(val, goal);
       }
       if (currentIndex > goal) finished = true;
       currentIndex++;
@@ -203,7 +203,7 @@ export const ListPage: React.FC = () => {
       setRenderArr(arr);
       if (currentIndex > goal) finished = true;
       currentIndex++;
-    }, DELAY_IN_MS);
+    }, SHORT_DELAY_IN_MS);
   }
 
   const elements = renderArr.map((ele: TRenderEle, index: number) => {
@@ -243,9 +243,9 @@ export const ListPage: React.FC = () => {
         <Button onClick={pop} disabled={Boolean(running) || renderArr.length < 2} isLoader={running === RunningValues.pop}>Удалить из tail</Button>
       </div>
       <div className={styles.container}>
-        <Input extraClass={styles.input} placeholder="Введите индекс" type="number" value={index || ''} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setIndex(Math.min(evt.target.valueAsNumber, renderArr.length - 1))} min={0} max={7} disabled={Boolean(running)} />
-        <Button extraClass={styles.wide} onClick={addAtIndex} disabled={Boolean(running) || !value || !index} isLoader={running === RunningValues.addAtIndex}>Добавить по индексу</Button>
-        <Button extraClass={styles.wide} onClick={deleteAtIndex} disabled={Boolean(running) || !value || !index} isLoader={running === RunningValues.deleteAtIndex}>Удалить по индексу</Button>
+        <Input extraClass={styles.input} placeholder="Введите индекс" type="number" value={index === undefined ? '' : index} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setIndex(Math.min(evt.target.valueAsNumber, renderArr.length - 1))} min={0} max={7} disabled={Boolean(running)} />
+        <Button extraClass={styles.wide} onClick={addAtIndex} disabled={Boolean(running) || !value || index === undefined} isLoader={running === RunningValues.addAtIndex}>Добавить по индексу</Button>
+        <Button extraClass={styles.wide} onClick={deleteAtIndex} disabled={Boolean(running) || index === undefined} isLoader={running === RunningValues.deleteAtIndex}>Удалить по индексу</Button>
       </div>
       <div className={styles.render}>{elements}</div>
     </SolutionLayout>
