@@ -4,6 +4,8 @@ import { ArrayStates } from "../../types/array-states";
 import { TArray } from "../../types/common";
 import switchElems from "../../utils/switch";
 import { Button } from "../ui/button/button";
+import { AscendingIcon } from "../ui/icons/ascending-icon";
+import { DescendingIcon } from "../ui/icons/descending-icon";
 import { RadioInput } from "../ui/radio-input/radio-input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import ArrayView from "./array-view";
@@ -138,8 +140,8 @@ export const SortingPage: React.FC = () => {
       <div className={styles.controls}>
         <RadioInput extraClass={styles.radio} label="Выбор" checked={algorithm === AlgorithmValues.Select} onClick={() => setAlgorithm(AlgorithmValues.Select)} disabled={Boolean(running)} />
         <RadioInput extraClass={styles.radio} label="Пузырёк" checked={algorithm === AlgorithmValues.Bubble} onClick={() => setAlgorithm(AlgorithmValues.Bubble)} disabled={Boolean(running)} />
-        <Button extraClass={styles.button} onClick={() => runSort(RunningValues.Ascending)} disabled={Boolean(running)} isLoader={running === RunningValues.Ascending}><svg xmlns="http://www.w3.org/2000/svg" width="20" height="12" fill="none"><path fill="#000" fill-opacity=".85" d="M1 0a1 1 0 1 0 0 2h10a1 1 0 1 0 0-2H1ZM0 6a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1Zm0 5a1 1 0 0 1 1-1h18a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1Z"/></svg>По возрастанию</Button>
-        <Button extraClass={styles.button} onClick={() => runSort(RunningValues.Descending)} disabled={Boolean(running)} isLoader={running === RunningValues.Descending}><svg xmlns="http://www.w3.org/2000/svg" width="21" height="12" fill="none"><path fill="#292929" fill-rule="evenodd" d="M.5 1a1 1 0 0 1 1-1h18a1 1 0 1 1 0 2h-18a1 1 0 0 1-1-1Zm0 5a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2h-14a1 1 0 0 1-1-1Zm1 4a1 1 0 1 0 0 2h10a1 1 0 1 0 0-2h-10Z" clip-rule="evenodd"/></svg>По убыванию</Button>
+        <Button extraClass={styles.button} onClick={() => runSort(RunningValues.Ascending)} disabled={Boolean(running)} isLoader={running === RunningValues.Ascending}><AscendingIcon />По возрастанию</Button>
+        <Button extraClass={styles.button} onClick={() => runSort(RunningValues.Descending)} disabled={Boolean(running)} isLoader={running === RunningValues.Descending}><DescendingIcon />По убыванию</Button>
         <Button extraClass={styles.button} onClick={() => setArray(randomArr())} disabled={Boolean(running)}>Новый массив</Button>
       </div>
       <ArrayView array={array} />
