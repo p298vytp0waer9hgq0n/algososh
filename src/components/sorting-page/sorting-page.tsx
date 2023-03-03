@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { DELAY_IN_MS } from "../../constants/delays";
 import { ArrayStates } from "../../types/array-states";
 import { TArray } from "../../types/common";
+import { Direction } from "../../types/direction";
 import switchElems from "../../utils/switch";
 import { Button } from "../ui/button/button";
 import { AscendingIcon } from "../ui/icons/ascending-icon";
@@ -12,10 +13,6 @@ import ArrayView from "./array-view";
 
 import styles from "./sorting-page.module.css";
 
-enum RunningValues {
-  Ascending = 1,
-  Descending
-}
 enum AlgorithmValues {
   Select,
   Bubble
@@ -23,7 +20,7 @@ enum AlgorithmValues {
 
 export const SortingPage: React.FC = () => {
   const [array, setArray] = useState<TArray>([]);
-  const [running, setRunning] = useState<RunningValues | false>(false);
+  const [running, setRunning] = useState<Direction | false>(false);
   const [algorithm, setAlgorithm] = useState<AlgorithmValues>(AlgorithmValues.Select);
   const interval = useRef<NodeJS.Timeout>();
 
@@ -36,7 +33,7 @@ export const SortingPage: React.FC = () => {
     return arr;
   }
 
-  function selectSort (direction: RunningValues) {
+  function selectSort (direction: Direction) {
     setArray((oldArray) => {
       return oldArray.map((ele, index) => {
         return {
@@ -50,7 +47,7 @@ export const SortingPage: React.FC = () => {
     let currentIndex = 0;
     const currentArray = [ ...array ];
     interval.current = setInterval(() => {
-      const condition = direction === RunningValues.Ascending ? currentArray[pivotIndex].value > currentArray[currentIndex].value : currentArray[pivotIndex].value < currentArray[currentIndex].value;
+      const condition = direction === Direction.Ascending ? currentArray[pivotIndex].value > currentArray[currentIndex].value : currentArray[pivotIndex].value < currentArray[currentIndex].value;
       if (condition) pivotIndex = currentIndex;
       currentIndex++;
       if (currentIndex > currentArray.length - 1) {
@@ -74,7 +71,7 @@ export const SortingPage: React.FC = () => {
     }, DELAY_IN_MS);
   }
   
-  function bubbleSort (direction: RunningValues) {
+  function bubbleSort (direction: Direction) {
     setArray((oldArray) => {
       return oldArray.map((ele, index) => {
         return {
@@ -89,7 +86,7 @@ export const SortingPage: React.FC = () => {
     let endIndex = array.length - 1;
     const currentArray = [ ...array ];
     interval.current = setInterval(() => {
-      const condition = direction === RunningValues.Ascending ? currentArray[firstIndex].value > currentArray[secondIndex].value : currentArray[firstIndex].value < currentArray[secondIndex].value;
+      const condition = direction === Direction.Ascending ? currentArray[firstIndex].value > currentArray[secondIndex].value : currentArray[firstIndex].value < currentArray[secondIndex].value;
       if (condition) {
         switchElems(currentArray, firstIndex, secondIndex);
         lastIndex = firstIndex;
@@ -129,7 +126,7 @@ export const SortingPage: React.FC = () => {
     }
   }, []);
 
-  function runSort (runningValue: RunningValues) {
+  function runSort (runningValue: Direction) {
     setRunning(runningValue);
     if (algorithm === AlgorithmValues.Select) selectSort(runningValue);
     if (algorithm === AlgorithmValues.Bubble) bubbleSort(runningValue);
@@ -140,8 +137,8 @@ export const SortingPage: React.FC = () => {
       <div className={styles.controls}>
         <RadioInput extraClass={styles.radio} label="Выбор" checked={algorithm === AlgorithmValues.Select} onChange={() => setAlgorithm(AlgorithmValues.Select)} disabled={Boolean(running)} />
         <RadioInput extraClass={styles.radio} label="Пузырёк" checked={algorithm === AlgorithmValues.Bubble} onChange={() => setAlgorithm(AlgorithmValues.Bubble)} disabled={Boolean(running)} />
-        <Button extraClass={styles.button} onClick={() => runSort(RunningValues.Ascending)} disabled={Boolean(running)} isLoader={running === RunningValues.Ascending}><AscendingIcon />По возрастанию</Button>
-        <Button extraClass={styles.button} onClick={() => runSort(RunningValues.Descending)} disabled={Boolean(running)} isLoader={running === RunningValues.Descending}><DescendingIcon />По убыванию</Button>
+        <Button extraClass={styles.button} onClick={() => runSort(Direction.Ascending)} disabled={Boolean(running)} isLoader={running === Direction.Ascending}><AscendingIcon />По возрастанию</Button>
+        <Button extraClass={styles.button} onClick={() => runSort(Direction.Descending)} disabled={Boolean(running)} isLoader={running === Direction.Descending}><DescendingIcon />По убыванию</Button>
         <Button extraClass={styles.button} onClick={() => setArray(randomArr())} disabled={Boolean(running)}>Новый массив</Button>
       </div>
       <ArrayView array={array} />

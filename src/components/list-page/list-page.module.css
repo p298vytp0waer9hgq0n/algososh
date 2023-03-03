@@ -9,10 +9,6 @@
     max-width: 204px;
 }
 
-.wide {
-    width: 100%;
-}
-
 .render {
     margin-top: 120px;
     display: flex;

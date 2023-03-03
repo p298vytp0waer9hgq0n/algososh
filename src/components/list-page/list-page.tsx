@@ -244,8 +244,8 @@ export const ListPage: React.FC = () => {
       </div>
       <div className={styles.container}>
         <Input extraClass={styles.input} placeholder="Введите индекс" type="number" value={index === undefined ? '' : index} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setIndex(Math.min(evt.target.valueAsNumber, renderArr.length - 1))} min={0} max={7} disabled={Boolean(running)} />
-        <Button extraClass={styles.wide} onClick={addAtIndex} disabled={Boolean(running) || !value || index === undefined} isLoader={running === RunningValues.addAtIndex}>Добавить по индексу</Button>
-        <Button extraClass={styles.wide} onClick={deleteAtIndex} disabled={Boolean(running) || index === undefined} isLoader={running === RunningValues.deleteAtIndex}>Удалить по индексу</Button>
+        <Button linkedList="big" onClick={addAtIndex} disabled={Boolean(running) || !value || index === undefined} isLoader={running === RunningValues.addAtIndex}>Добавить по индексу</Button>
+        <Button linkedList="big" onClick={deleteAtIndex} disabled={Boolean(running) || index === undefined} isLoader={running === RunningValues.deleteAtIndex}>Удалить по индексу</Button>
       </div>
       <div className={styles.render}>{elements}</div>
     </SolutionLayout>
