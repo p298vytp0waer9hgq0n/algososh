@@ -4,6 +4,7 @@ export type TQueue<T> = {
     clear: () => void;
     peek: () => T | undefined;
     isEmpty: boolean;
+    isFull: boolean;
     headIndex: number;
     tailIndex: number;
     elements: Array<T | undefined>;
@@ -57,6 +58,10 @@ export default class Queue<T> implements TQueue<T> {
 
     get isEmpty () {
         return (this.size === 0);
+    }
+
+    get isFull () {
+        return (this.size === this.length);
     }
     
     get headIndex () {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DELAY_IN_MS, SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import useStack from "../../hooks/use-stack";
 import { ElementStates } from "../../types/element-states";
 import { Button } from "../ui/button/button";
@@ -9,10 +9,15 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 
 import styles from "./stack-page.module.css";
 
+enum RunningValues {
+  Add = 1,
+  Remove
+}
+
 export const StackPage: React.FC = () => {
   const [value, setValue] = useState<string>();
   const [stackRender, setStackRender] = useState<string[]>([]);
-  const [running, setRunning] = useState<boolean>();
+  const [running, setRunning] = useState<RunningValues | false>();
   const stack = useStack<string>();
   let interval: NodeJS.Timeout | null = null;
   
@@ -24,7 +29,7 @@ export const StackPage: React.FC = () => {
   
   function stackAdd () {
     setValue('');
-    setRunning(true);
+    setRunning(RunningValues.Add);
     value && stack.push(value);
     setStackRender(stack.elements);
     interval = setTimeout(() => {
@@ -32,7 +37,7 @@ export const StackPage: React.FC = () => {
     }, SHORT_DELAY_IN_MS);
   }
   function stackRemove () {
-    setRunning(true);
+    setRunning(RunningValues.Remove);
     interval = setTimeout(() => {
       stack.pop();
       setStackRender(stack.elements);
@@ -60,9 +65,9 @@ export const StackPage: React.FC = () => {
     <SolutionLayout title="Стек">
       <div className={styles.container}>
         <Input value={value || ''} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setValue(evt.target.value)} maxLength={4} isLimitText={true} />
-        <Button onClick={stackAdd}>Добавить</Button>
-        <Button onClick={stackRemove}>Удалить</Button>
-        <Button onClick={stackClear}>Очистить</Button>
+        <Button onClick={stackAdd} disabled={Boolean(running)} isLoader={running === RunningValues.Add}>Добавить</Button>
+        <Button onClick={stackRemove} disabled={Boolean(running) || stackRender.length < 1} isLoader={running === RunningValues.Remove}>Удалить</Button>
+        <Button onClick={stackClear} disabled={Boolean(running) || stackRender.length < 1}>Очистить</Button>
       </div>
       <div className={styles.render}>{elements}</div>
     </SolutionLayout>

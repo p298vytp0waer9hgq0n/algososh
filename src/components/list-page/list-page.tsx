@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import useLinkedList from "../../hooks/use-linked-list";
-import LinkedList from "../../utils/linked-list";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { Input } from "../ui/input/input";
@@ -68,7 +67,6 @@ export const ListPage: React.FC = () => {
         state: ElementStates.Default
       }
     });
-    // setRenderArr(arr);
     return arr;
   }
 
@@ -217,7 +215,6 @@ export const ListPage: React.FC = () => {
       head = 'head';
     }
     if (ele.sub) {
-      console.log(ele.sub);
       tail = <Circle isSmall={true} letter={String(ele.sub.value)} state={ElementStates.Changing} />
     } else if (index === renderArr.length - 1) {
       tail = 'tail';
@@ -240,15 +237,15 @@ export const ListPage: React.FC = () => {
     <SolutionLayout title="Связный список">
       <div className={styles.container}>
         <Input placeholder="Введите значение" value={value || ''} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setValue(evt.target.value)} maxLength={4} isLimitText={true} />
-        <Button onClick={prepend}>Добавить в head</Button>
-        <Button onClick={append}>Добавить в tail</Button>
-        <Button onClick={shift}>Удалить из head</Button>
-        <Button onClick={pop}>Удалить из tail</Button>
+        <Button onClick={prepend} disabled={Boolean(running) || !value} isLoader={running === RunningValues.prepend}>Добавить в head</Button>
+        <Button onClick={append} disabled={Boolean(running) || !value} isLoader={running === RunningValues.append}>Добавить в tail</Button>
+        <Button onClick={shift} disabled={Boolean(running) || renderArr.length < 2} isLoader={running === RunningValues.shift}>Удалить из head</Button>
+        <Button onClick={pop} disabled={Boolean(running) || renderArr.length < 2} isLoader={running === RunningValues.pop}>Удалить из tail</Button>
       </div>
       <div className={styles.container}>
-        <Input placeholder="Введите индекс" type="number" value={index || ''} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setIndex(evt.target.valueAsNumber)} max={7} />
-        <Button onClick={addAtIndex}>Добавить по индексу</Button>
-        <Button onClick={deleteAtIndex}>Удалить по индексу</Button>
+        <Input placeholder="Введите индекс" type="number" value={index || ''} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setIndex(Math.min(evt.target.valueAsNumber, renderArr.length - 1))} min={0} max={7} />
+        <Button onClick={addAtIndex} disabled={Boolean(running) || !value || !index} isLoader={running === RunningValues.addAtIndex}>Добавить по индексу</Button>
+        <Button onClick={deleteAtIndex} disabled={Boolean(running) || !value || !index} isLoader={running === RunningValues.deleteAtIndex}>Удалить по индексу</Button>
       </div>
       <div className={styles.render}>{elements}</div>
     </SolutionLayout>
