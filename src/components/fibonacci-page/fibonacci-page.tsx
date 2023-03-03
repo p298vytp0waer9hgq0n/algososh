@@ -43,12 +43,12 @@ export const FibonacciPage: React.FC = () => {
     return (() => {
       if (interval) clearInterval(interval);
     });
-  }, [running])
+  }, [running, limit])
 
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
       <div className={styles['input-container']}>
-        <Input extraClass={styles.input} value={limit || ''} isLimitText={true} type={'number'} max={19} min={1} onChange={handleChange} />
+        <Input extraClass={styles.input} value={limit || ''} isLimitText={true} type={'number'} max={19} min={1} onChange={handleChange} disabled={Boolean(running)} />
         <Button extraClass={styles.button} onClick={handleClick} isLoader={running} disabled={(!limit && limit !== 0) || limit > 19}>Рассчитать</Button>
       </div>
       { sequense && <FibonacciString seq={sequense} /> }

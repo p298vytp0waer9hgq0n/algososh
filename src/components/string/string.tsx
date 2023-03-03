@@ -142,8 +142,8 @@ export const StringComponent: React.FC = () => {
   return (
     <SolutionLayout title="Строка">
       <div className={styles['input-container']}>
-        <Input isLimitText={true} maxLength={11} value={string} onChange={handleChange} />
-        <Button onClick={handleClick} isLoader={running}>Развернуть</Button>
+        <Input isLimitText={true} maxLength={11} value={string} onChange={handleChange} disabled={Boolean(running)} />
+        <Button onClick={handleClick} disabled={Boolean(running)} isLoader={running}>Развернуть</Button>
       </div>
       { workingWord && <ReverseString word={workingWord} /> }
     </SolutionLayout>

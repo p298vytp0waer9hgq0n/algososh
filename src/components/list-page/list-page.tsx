@@ -236,14 +236,14 @@ export const ListPage: React.FC = () => {
   return (
     <SolutionLayout title="Связный список">
       <div className={styles.container}>
-        <Input placeholder="Введите значение" value={value || ''} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setValue(evt.target.value)} maxLength={4} isLimitText={true} />
+        <Input placeholder="Введите значение" value={value || ''} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setValue(evt.target.value)} maxLength={4} isLimitText={true} disabled={Boolean(running)} />
         <Button onClick={prepend} disabled={Boolean(running) || !value} isLoader={running === RunningValues.prepend}>Добавить в head</Button>
         <Button onClick={append} disabled={Boolean(running) || !value} isLoader={running === RunningValues.append}>Добавить в tail</Button>
         <Button onClick={shift} disabled={Boolean(running) || renderArr.length < 2} isLoader={running === RunningValues.shift}>Удалить из head</Button>
         <Button onClick={pop} disabled={Boolean(running) || renderArr.length < 2} isLoader={running === RunningValues.pop}>Удалить из tail</Button>
       </div>
       <div className={styles.container}>
-        <Input placeholder="Введите индекс" type="number" value={index || ''} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setIndex(Math.min(evt.target.valueAsNumber, renderArr.length - 1))} min={0} max={7} />
+        <Input placeholder="Введите индекс" type="number" value={index || ''} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setIndex(Math.min(evt.target.valueAsNumber, renderArr.length - 1))} min={0} max={7} disabled={Boolean(running)} />
         <Button onClick={addAtIndex} disabled={Boolean(running) || !value || !index} isLoader={running === RunningValues.addAtIndex}>Добавить по индексу</Button>
         <Button onClick={deleteAtIndex} disabled={Boolean(running) || !value || !index} isLoader={running === RunningValues.deleteAtIndex}>Удалить по индексу</Button>
       </div>

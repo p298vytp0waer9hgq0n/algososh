@@ -64,7 +64,7 @@ export const StackPage: React.FC = () => {
   return (
     <SolutionLayout title="Стек">
       <div className={styles.container}>
-        <Input value={value || ''} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setValue(evt.target.value)} maxLength={4} isLimitText={true} />
+        <Input value={value || ''} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setValue(evt.target.value)} maxLength={4} isLimitText={true} disabled={Boolean(running)} />
         <Button onClick={stackAdd} disabled={Boolean(running)} isLoader={running === RunningValues.Add}>Добавить</Button>
         <Button onClick={stackRemove} disabled={Boolean(running) || stackRender.length < 1} isLoader={running === RunningValues.Remove}>Удалить</Button>
         <Button onClick={stackClear} disabled={Boolean(running) || stackRender.length < 1}>Очистить</Button>
