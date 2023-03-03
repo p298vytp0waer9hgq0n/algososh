@@ -7,6 +7,9 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./fibonacci-page.module.css";
 import { FibonacciString } from "./fibonacci-string";
 
+const minInput = 1;
+const maxInput = 19;
+
 export const FibonacciPage: React.FC = () => {
   const [running, setRunning] = useState(false);
   const [limit, setLimit] = useState<number>();
@@ -17,7 +20,7 @@ export const FibonacciPage: React.FC = () => {
     setRunning(true);
   }
   function handleChange (evt: React.ChangeEvent<HTMLInputElement>) {
-    setLimit(evt.target.valueAsNumber);
+    setLimit(Math.max(Math.min(evt.target.valueAsNumber, maxInput), minInput));
   }
   
   useEffect(() => {
@@ -48,7 +51,7 @@ export const FibonacciPage: React.FC = () => {
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
       <div className={styles['input-container']}>
-        <Input placeholder="Введите число" extraClass={styles.input} value={limit || ''} isLimitText={true} type={'number'} max={19} min={1} onChange={handleChange} disabled={Boolean(running)} />
+        <Input placeholder="Введите число" extraClass={styles.input} value={limit || ''} isLimitText={true} type={'number'} max={maxInput} min={minInput} onChange={handleChange} disabled={Boolean(running)} />
         <Button extraClass={styles.button} onClick={handleClick} isLoader={running} disabled={(!limit && limit !== 0) || limit > 19}>Рассчитать</Button>
       </div>
       { sequense && <FibonacciString seq={sequense} /> }

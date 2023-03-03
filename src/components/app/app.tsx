@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { FibonacciPage } from "../fibonacci-page/fibonacci-page";
 import { ListPage } from "../list-page/list-page";
@@ -8,33 +7,33 @@ import { StringComponent } from "../string/string";
 import { SortingPage } from "../sorting-page/sorting-page";
 import { StackPage } from "../stack-page/stack-page";
 
-import "./app.css";
 import { basename } from "../../constants/deploy";
+import { ROUTES } from "../../constants/routes";
 
 function App() {
   return (
     <div className="app">
       <BrowserRouter basename={basename}>
         <Switch>
-          <Route path="/" exact>
+          <Route path={ROUTES.HOME} exact>
             <MainPage />
           </Route>
-          <Route path="/recursion">
+          <Route path={ROUTES.STRING}>
             <StringComponent />
           </Route>
-          <Route path="/fibonacci">
+          <Route path={ROUTES.FIBONACCI}>
             <FibonacciPage />
           </Route>
-          <Route path="/sorting">
+          <Route path={ROUTES.SORTING}>
             <SortingPage />
           </Route>
-          <Route path="/stack">
+          <Route path={ROUTES.STACK}>
             <StackPage />
           </Route>
-          <Route path="/queue">
+          <Route path={ROUTES.QUEUE}>
             <QueuePage />
           </Route>
-          <Route path="/list">
+          <Route path={ROUTES.LIST}>
             <ListPage />
           </Route>
         </Switch>

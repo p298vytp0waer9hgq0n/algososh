@@ -30,6 +30,9 @@ type TRenderEle = {
   state: ElementStates;
 }
 
+const minIndex = 0;
+const maxIndex = 7;
+
 export const ListPage: React.FC = () => {
   const [value, setValue] = useState<string>();
   const [index, setIndex] = useState<number>();
@@ -243,7 +246,7 @@ export const ListPage: React.FC = () => {
         <Button onClick={pop} disabled={Boolean(running) || renderArr.length < 2} isLoader={running === RunningValues.pop}>Удалить из tail</Button>
       </div>
       <div className={styles.container}>
-        <Input extraClass={styles.input} placeholder="Введите индекс" type="number" value={index === undefined ? '' : index} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setIndex(Math.min(evt.target.valueAsNumber, renderArr.length - 1))} min={0} max={7} disabled={Boolean(running)} />
+        <Input extraClass={styles.input} placeholder="Введите индекс" type="number" value={index === undefined ? '' : index} onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setIndex(Math.max(Math.min(evt.target.valueAsNumber, renderArr.length - 1), minIndex))} min={minIndex} max={maxIndex} disabled={Boolean(running)} />
         <Button linkedList="big" onClick={addAtIndex} disabled={Boolean(running) || !value || index === undefined} isLoader={running === RunningValues.addAtIndex}>Добавить по индексу</Button>
         <Button linkedList="big" onClick={deleteAtIndex} disabled={Boolean(running) || index === undefined} isLoader={running === RunningValues.deleteAtIndex}>Удалить по индексу</Button>
       </div>
