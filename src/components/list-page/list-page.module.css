@@ -1,0 +1,12 @@
+.container {
+    display: flex;
+}
+
+.render {
+    margin-top: 80px;
+    display: flex;
+}
+
+.element {
+    display: flex;
+}
