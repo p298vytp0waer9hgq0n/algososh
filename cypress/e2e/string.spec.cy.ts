@@ -1,3 +1,5 @@
+import { circleCircle, circleLetter } from "./constants";
+
 describe('Строка', () => {
     beforeEach(() => {
         cy.visit(`http://localhost:3000/algososh/recursion`);
@@ -15,8 +17,8 @@ describe('Строка', () => {
         cy.clock();
         cy.get('input').type('blah');
         cy.get('@button').click();
-        cy.get('div[class*="circle_circle"]').as('circles');
-        cy.get('p[class*="circle_letter"').as('letters');
+        cy.get(circleCircle).as('circles');
+        cy.get(circleLetter).as('letters');
         let word = 'blah';
         for (let i = 0; i < 4; i++) {
             cy.get('@letters').eq(i). contains(word[i]);
