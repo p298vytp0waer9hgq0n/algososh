@@ -17,20 +17,18 @@ describe('Строка', () => {
         cy.clock();
         cy.get('input').type('blah');
         cy.get('@button').click();
-        cy.get(circleCircle).as('circles');
-        cy.get(circleLetter).as('letters');
         let word = 'blah';
         for (let i = 0; i < 4; i++) {
-            cy.get('@letters').eq(i). contains(word[i]);
+            cy.get(circleLetter).eq(i). contains(word[i]);
         }
-        cy.get('@circles').each(($circle) => {
+        cy.get(circleCircle).each(($circle) => {
             cy.wrap($circle).should('have.attr', 'class').and('match', defaultStyle);
         });
         cy.tick(1000);
         for (let i = 0; i < 4; i++) {
-            cy.get('@letters').eq(i). contains(word[i]);
+            cy.get(circleLetter).eq(i). contains(word[i]);
         }
-        cy.get('@circles').each(($circle, $index) => {
+        cy.get(circleCircle).each(($circle, $index) => {
             if ($index === 0 || $index === 3) {
                 cy.wrap($circle).should('have.attr', 'class').and('match', changingStyle);
             } else {
@@ -40,9 +38,9 @@ describe('Строка', () => {
         cy.tick(1000);
         word = 'hlab';
         for (let i = 0; i < 4; i++) {
-            cy.get('@letters').eq(i). contains(word[i]);
+            cy.get(circleLetter).eq(i). contains(word[i]);
         }
-        cy.get('@circles').each(($circle, $index) => {
+        cy.get(circleCircle).each(($circle, $index) => {
             if ($index === 0 || $index === 3) {
                 cy.wrap($circle).should('have.attr', 'class').and('match', modifiedStyle);
             } else {
@@ -52,9 +50,9 @@ describe('Строка', () => {
         cy.tick(1000);
         word = 'halb';
         for (let i = 0; i < 4; i++) {
-            cy.get('@letters').eq(i). contains(word[i]);
+            cy.get(circleLetter).eq(i). contains(word[i]);
         }
-        cy.get('@circles').each(($circle) => {
+        cy.get(circleCircle).each(($circle) => {
             cy.wrap($circle).should('have.attr', 'class').and('match', modifiedStyle);
         });
     })
