@@ -59,7 +59,7 @@ describe('Стек', () => {
         cy.get(circleContent).should('have.length', 1);
     });
     
-    it('удаление елементов работает корректно', () => {
+    it('очистка стека работает корректно', () => {
         fill();
         cy.get('@clearButton').click();
         cy.get(circleContent).should('not.exist');        

@@ -1,3 +1,5 @@
+import { circleLetter } from "./constants";
+
 describe('Фибоначчи', () => {
     beforeEach(() => {
         cy.visit('http://localhost:3000/algososh/fibonacci');
@@ -16,7 +18,7 @@ describe('Фибоначчи', () => {
         cy.get('input').type('19');
         cy.get('@button').click();
         cy.tick(500*20);
-        cy.get('p[class*="circle_letter"]').as('numbers');
+        cy.get(circleLetter).as('numbers');
         cy.get('@numbers').then(($numbers) => {
             expect($numbers[0].textContent).to.eq($numbers[1].textContent).to.eq('1')
             for (let i = 2; i < 20; i++) {
