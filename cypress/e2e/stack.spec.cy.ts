@@ -1,4 +1,4 @@
-import { circleCircle, circleContent, circleHead, circleIndex, circleLetter } from "./constants";
+import { changingStyle, circleCircle, circleContent, circleHead, circleIndex, circleLetter, defaultStyle } from "./constants";
 
 describe('Стек', () => {
     beforeEach(() => {
@@ -29,11 +29,11 @@ describe('Стек', () => {
         const element = cy.get(circleContent);
         element.within(() => {
             cy.get(circleHead).contains('top');
-            cy.get(circleCircle).should('have.attr', 'class').and('match', /circle_changing/);
+            cy.get(circleCircle).should('have.attr', 'class').and('match', changingStyle);
             cy.get(circleIndex).contains('0');
             cy.get(circleLetter).contains('bleh');
             cy.tick(500);
-            cy.get(circleCircle).should('have.attr', 'class').and('match', /circle_default/);
+            cy.get(circleCircle).should('have.attr', 'class').and('match', defaultStyle);
         });
         cy.get('input').type('blah');
         cy.get('@addButton').click();
@@ -43,18 +43,18 @@ describe('Стек', () => {
         });
         newElement.within(() => {
             cy.get(circleHead).contains('top');
-            cy.get(circleCircle).should('have.attr', 'class').and('match', /circle_changing/);
+            cy.get(circleCircle).should('have.attr', 'class').and('match', changingStyle);
             cy.get(circleIndex).contains('1');
             cy.get(circleLetter).contains('blah');
             cy.tick(500);
-            cy.get(circleCircle).should('have.attr', 'class').and('match', /circle_default/);
+            cy.get(circleCircle).should('have.attr', 'class').and('match', defaultStyle);
         });
     });
     
     it('удаление елементов работает корректно', () => {
         fill();
         cy.get('@removeButton').click();
-        cy.get(circleCircle).eq(1).should('have.attr', 'class').and('match', /circle_changing/);
+        cy.get(circleCircle).eq(1).should('have.attr', 'class').and('match', changingStyle);
         cy.tick(500);
         cy.get(circleContent).should('have.length', 1);
     });

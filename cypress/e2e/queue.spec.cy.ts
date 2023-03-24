@@ -1,4 +1,4 @@
-import { circleCircle, circleContent, circleHead, circleLetter, circleTail } from "./constants";
+import { changingStyle, circleCircle, circleContent, circleHead, circleLetter, circleTail, defaultStyle } from "./constants";
 
 describe('Очередь', () => {
     beforeEach(() => {
@@ -29,9 +29,9 @@ describe('Очередь', () => {
         cy.get('input').type('bleh');
         cy.get('@addButton').click();
         cy.get(circleContent).eq(0).within(() =>  {
-            cy.get(circleCircle).should('have.attr', 'class').and('match', /circle_changing/);
+            cy.get(circleCircle).should('have.attr', 'class').and('match', changingStyle);
             cy.tick(500);
-            cy.get(circleCircle).should('have.attr', 'class').and('match', /circle_default/);
+            cy.get(circleCircle).should('have.attr', 'class').and('match', defaultStyle);
             cy.get(circleCircle).children('p').contains('bleh');
             cy.get(circleHead).contains('head');
             cy.get(circleTail).contains('tail');
@@ -43,9 +43,9 @@ describe('Очередь', () => {
             cy.get(circleTail).should('be.empty');
         });
         cy.get(circleContent).eq(1).within(() => {
-            cy.get(circleCircle).should('have.attr', 'class').and('match', /circle_changing/);
+            cy.get(circleCircle).should('have.attr', 'class').and('match', changingStyle);
             cy.tick(500);
-            cy.get(circleCircle).should('have.attr', 'class').and('match', /circle_default/);
+            cy.get(circleCircle).should('have.attr', 'class').and('match', defaultStyle);
             cy.get(circleCircle).children('p').contains('blah');
             cy.get(circleHead).should('be.empty');
             cy.get(circleTail).contains('tail');
@@ -56,10 +56,10 @@ describe('Очередь', () => {
         cy.clock();
         fill();
         cy.get('@deleteButton').click();
-        cy.get(circleCircle).eq(0).should('have.attr', 'class').and('match', /circle_changing/);
+        cy.get(circleCircle).eq(0).should('have.attr', 'class').and('match', changingStyle);
         cy.tick(500);
         cy.get(circleContent).eq(0).within(() => {
-            cy.get(circleCircle).should('have.attr', 'class').and('match', /circle_default/);
+            cy.get(circleCircle).should('have.attr', 'class').and('match', defaultStyle);
             cy.get(circleLetter).should('be.empty');
             cy.get(circleTail).should('be.empty');
             cy.get(circleHead).should('be.empty');
@@ -73,11 +73,11 @@ describe('Очередь', () => {
         fill();
         cy.get('@clearButton').click();
         cy.get(circleCircle).each(($circle, $index) => {
-            if ($index < 4) cy.wrap($circle).should('have.attr', 'class').and('match', /circle_changing/);
+            if ($index < 4) cy.wrap($circle).should('have.attr', 'class').and('match', changingStyle);
         });
         cy.tick(500);
         cy.get(circleCircle).each(($circle) => {
-            cy.wrap($circle).should('have.attr', 'class').and('match', /circle_default/);
+            cy.wrap($circle).should('have.attr', 'class').and('match', defaultStyle);
         });
         cy.get(circleLetter).each(($letter) => {
             expect($letter).to.be.empty;

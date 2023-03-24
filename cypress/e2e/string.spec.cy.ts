@@ -1,4 +1,4 @@
-import { circleCircle, circleLetter } from "./constants";
+import { changingStyle, circleCircle, circleLetter, defaultStyle, modifiedStyle } from "./constants";
 
 describe('Строка', () => {
     beforeEach(() => {
@@ -24,7 +24,7 @@ describe('Строка', () => {
             cy.get('@letters').eq(i). contains(word[i]);
         }
         cy.get('@circles').each(($circle) => {
-            cy.wrap($circle).should('have.attr', 'class').and('match', /circle_default/);
+            cy.wrap($circle).should('have.attr', 'class').and('match', defaultStyle);
         });
         cy.tick(1000);
         for (let i = 0; i < 4; i++) {
@@ -32,9 +32,9 @@ describe('Строка', () => {
         }
         cy.get('@circles').each(($circle, $index) => {
             if ($index === 0 || $index === 3) {
-                cy.wrap($circle).should('have.attr', 'class').and('match', /circle_changing/);
+                cy.wrap($circle).should('have.attr', 'class').and('match', changingStyle);
             } else {
-                cy.wrap($circle).should('have.attr', 'class').and('match', /circle_default/);
+                cy.wrap($circle).should('have.attr', 'class').and('match', defaultStyle);
             }
         });
         cy.tick(1000);
@@ -44,9 +44,9 @@ describe('Строка', () => {
         }
         cy.get('@circles').each(($circle, $index) => {
             if ($index === 0 || $index === 3) {
-                cy.wrap($circle).should('have.attr', 'class').and('match', /circle_modified/);
+                cy.wrap($circle).should('have.attr', 'class').and('match', modifiedStyle);
             } else {
-                cy.wrap($circle).should('have.attr', 'class').and('match', /circle_changing/);
+                cy.wrap($circle).should('have.attr', 'class').and('match', changingStyle);
             }
         });
         cy.tick(1000);
@@ -55,7 +55,7 @@ describe('Строка', () => {
             cy.get('@letters').eq(i). contains(word[i]);
         }
         cy.get('@circles').each(($circle) => {
-            cy.wrap($circle).should('have.attr', 'class').and('match', /circle_modified/);
+            cy.wrap($circle).should('have.attr', 'class').and('match', modifiedStyle);
         });
     })
 });
