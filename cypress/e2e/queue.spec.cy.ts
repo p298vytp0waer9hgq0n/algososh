@@ -2,7 +2,7 @@ import { circleCircle, circleContent, circleHead, circleLetter, circleTail } fro
 
 describe('Очередь', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:3000/algososh/queue');
+        cy.visit('queue');
         cy.get('button').contains('Добавить').as('addButton');
         cy.get('button').contains('Удалить').as('deleteButton');
         cy.get('button').contains('Очистить').as('clearButton');

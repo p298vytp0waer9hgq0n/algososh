@@ -3,7 +3,7 @@ import { circleCircle, circleContent, circleHead, circleLetter, circleTail } fro
 describe('Список', () => {
     beforeEach(() => {
         cy.clock();
-        cy.visit('http://localhost:3000/algososh/list');
+        cy.visit('list');
     })
         
     it('рандомный список отрисовывается корректно', () => {

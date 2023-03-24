@@ -1,5 +1,5 @@
 describe('роутинг работает как следует', () => {
-    beforeEach(() => {cy.visit('http://localhost:3000')});
+    beforeEach(() => {cy.visit('/')});
 
     it('по умолчанию загружается главная страница', () => {
         cy.get('a').should('have.length', 6);

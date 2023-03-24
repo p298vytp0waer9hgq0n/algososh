@@ -2,7 +2,7 @@ import { circleCircle, circleContent, circleHead, circleIndex, circleLetter } fr
 
 describe('Стек', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:3000/algososh/stack');
+        cy.visit('stack');
         cy.get('button').contains('Добавить').as('addButton');
         cy.get('button').contains('Удалить').as('removeButton');
         cy.get('button').contains('Очистить').as('clearButton');

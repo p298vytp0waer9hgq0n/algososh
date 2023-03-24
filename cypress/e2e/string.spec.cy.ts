@@ -2,7 +2,7 @@ import { circleCircle, circleLetter } from "./constants";
 
 describe('Строка', () => {
     beforeEach(() => {
-        cy.visit(`http://localhost:3000/algososh/recursion`);
+        cy.visit(`recursion`);
         cy.get('button').contains('Развернуть').as('button');
     })
     

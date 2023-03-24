@@ -2,7 +2,7 @@ import { circleLetter } from "./constants";
 
 describe('Фибоначчи', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:3000/algososh/fibonacci');
+        cy.visit('fibonacci');
         cy.get('button').contains('Рассчитать').as('button');
     });
 
